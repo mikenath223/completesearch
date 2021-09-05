@@ -3,9 +3,10 @@ import { getSearchData } from "utils/api";
 
 export const getSearch = createAsyncThunk(
   "/search/get",
-  async (queryObj, { rejectWithValue }) => {
+  async ({ isNextPage, ...queryObj }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      return await getSearchData(queryObj);
+      const data = await getSearchData(queryObj);
+      return fulfillWithValue({ data, isNextPage });
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -22,14 +23,19 @@ export const searchSlice = createSlice({
   name: "search",
   initialState,
   extraReducers: {
-    [getSearch.fulfilled]: (state, action) => ({
-      data: {
-        ...action.payload,
-        results: [...(state?.data?.results || []), ...action.payload.results],
-      },
-      loading: false,
-      error: false,
-    }),
+    [getSearch.fulfilled]: (state, action) => {
+      const results = action.payload.isNextPage
+        ? [...state?.data?.results, ...action.payload.data.results]
+        : action.payload.data.results;
+      return {
+        data: {
+          ...action.payload.data,
+          results,
+        },
+        loading: false,
+        error: false,
+      };
+    },
     [getSearch.loading]: (state) => ({
       ...state,
       error: false,

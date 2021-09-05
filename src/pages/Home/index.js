@@ -39,7 +39,7 @@ export default function Home() {
         const [first] = entries;
         if (first.isIntersecting) {
           const nextPageUrl = searchResult?.data?.info?.next;
-          nextPageUrl && dispatch(getSearch({ nextPageUrl }));
+          nextPageUrl && dispatch(getSearch({ nextPageUrl, isNextPage: true }));
         }
       }),
     [dispatch, searchResult?.data?.info?.next]
