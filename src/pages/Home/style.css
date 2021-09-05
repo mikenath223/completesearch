@@ -39,8 +39,8 @@
 }
 
 .item-spacer {
-	width: 13vw;
 	margin-left: 1rem;
+	margin-right: 2rem;
 }
 
 .icon-circle {
@@ -66,4 +66,10 @@
 
 .search-container .ant-space-align-center {
 	margin-bottom: 0.3rem;
+}
+
+@media (min-width: 1200px) {
+	.item-spacer {
+		width: 13vw;
+	}
 }
