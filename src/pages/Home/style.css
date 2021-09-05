@@ -36,6 +36,8 @@
 
 .list-name {
 	font-size: 1rem;
+	display: inline-block;
+	margin-top: 0.45rem;
 }
 
 .item-spacer {
@@ -66,10 +68,5 @@
 
 .search-container .ant-space-align-center {
 	margin-bottom: 0.3rem;
-}
-
-@media (min-width: 1200px) {
-	.item-spacer {
-		width: 13vw;
-	}
+	margin-top: 0.45rem;
 }
