@@ -54,7 +54,7 @@ export default function Home() {
         currentObserver.unobserve(currentElement);
       }
     };
-  }, [lastElement]);
+  }, [lastElement, observer]);
 
   const handleCloseModal = () => setIsModalVisible(false);
 

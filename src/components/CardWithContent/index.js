@@ -1,4 +1,4 @@
-import { Image, Space, Divider, Typography, Row, Col } from "antd";
+import { Image, Space, Typography, Row, Col } from "antd";
 import Card from "components/Card";
 import "./style.css";
 
