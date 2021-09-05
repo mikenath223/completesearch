@@ -33,13 +33,17 @@ export default function Home() {
     return debounce(handleChange, 300);
   }, []);
 
-  const observer = new IntersectionObserver((entries) => {
-    const [first] = entries;
-    if (first.isIntersecting) {
-      const nextPageUrl = searchResult?.data?.info?.next;
-      nextPageUrl && dispatch(getSearch({ nextPageUrl }));
-    }
-  });
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver((entries) => {
+        const [first] = entries;
+        if (first.isIntersecting) {
+          const nextPageUrl = searchResult?.data?.info?.next;
+          nextPageUrl && dispatch(getSearch({ nextPageUrl }));
+        }
+      }),
+    [dispatch, searchResult?.data?.info?.next]
+  );
 
   useEffect(() => {
     const currentElement = lastElement;
