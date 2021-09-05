@@ -25,8 +25,13 @@
 	display: flex;
 	justify-content: space-around;
 	background-color: #FFF;
+	padding: 1rem;
+	cursor: pointer;
+}
+
+.search-container .card-list .ant-card-body {
+	padding: 0;
 	margin-bottom: 1.5vh;
-	padding: 1rem
 }
 
 .list-name {
@@ -47,4 +52,18 @@
 
 .icon-circle-alive {
 	background-color: #69DE75;
+}
+
+.loadmore-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.search-container .ant-list-item-meta {
+	align-items: center;
+}
+
+.search-container .ant-space-align-center {
+	margin-bottom: 0.3rem;
 }

@@ -1,0 +1,7 @@
+.modal-container .ant-modal-content {
+  border-radius: 10px;
+}
+
+.modal-container .ant-modal-footer {
+  display: none;
+}

@@ -1,9 +1,12 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getSearch } from "store/slices/searchSlice";
 import debounce from "lodash.debounce";
-import { Input, List, Avatar, Alert, Space, Typography } from "antd";
+import { Input, List, Avatar, Alert, Space, Typography, Spin } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import Modal from "components/Modal";
+import Card from "components/Card";
+import CardWithContent from "components/CardWithContent";
 import "./style.css";
 
 export default function Home() {
@@ -11,13 +14,15 @@ export default function Home() {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [lastElement, setLastElement] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [itemContent, setItemContent] = useState({});
 
   useEffect(() => {
     dispatch(getSearch({ name: "rick" }));
   }, [dispatch]);
 
   useEffect(() => {
-    input && dispatch(getSearch({ name: input }))
+    input && dispatch(getSearch({ name: input }));
   }, [input, dispatch]);
 
   const handleChange = (e) => {
@@ -51,6 +56,13 @@ export default function Home() {
     };
   }, [lastElement]);
 
+  const handleCloseModal = () => setIsModalVisible(false);
+
+  const handleShowMoreContent = (item) => {
+    setItemContent(item);
+    setIsModalVisible(true);
+  };
+
   return (
     <div className="search-container">
       <h1 className="search-headtext">Rick and Morty Search</h1>
@@ -82,24 +94,45 @@ export default function Home() {
           className="list-container"
           renderItem={(item, i) => (
             <div
+              key={item.id}
               ref={(r) =>
                 i === searchResult.data.results.length - 1 && setLastElement(r)
               }
+              onClick={() => handleShowMoreContent(item)}
             >
-              <List.Item className="list-item" style={{ paddingLeft: "1rem" }}>
-                <List.Item.Meta
-                  avatar={<Avatar src={item.image} />}
-                  title={<span className="list-name">{item.name}</span>}
-                />
-                <Space className="item-spacer">
-                  <div className={`icon-circle ${item.status === "Alive" && 'icon-circle-alive'}`} />
-                  <Typography>{`${item.status} - ${item.species}`}</Typography>
-                </Space>
-              </List.Item>
+              <Card className="card-list">
+                <List.Item
+                  className="list-item"
+                  style={{ paddingLeft: "1rem" }}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar src={item.image} />}
+                    title={<span className="list-name">{item.name}</span>}
+                  />
+                  <Space className="item-spacer">
+                    <div
+                      className={`icon-circle ${
+                        item.status === "Alive" && "icon-circle-alive"
+                      }`}
+                    />
+                    <Typography>{`${item.status} - ${item.species}`}</Typography>
+                  </Space>
+                </List.Item>
+              </Card>
             </div>
           )}
-        />
+        >
+          <div className="loadmore-container">
+            {searchResult?.data?.info?.next && <Spin />}
+            {!searchResult?.data?.info?.next && !searchResult.loading && (
+              <Typography.Text>No more Content</Typography.Text>
+            )}
+          </div>
+        </List>
       )}
+      <Modal visible={isModalVisible} onCancel={handleCloseModal}>
+        <CardWithContent {...itemContent} />
+      </Modal>
     </div>
   );
 }
